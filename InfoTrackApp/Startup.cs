@@ -2,14 +2,21 @@ using AutoMapper;
 using InfoTrack.DAL;
 using InfoTrack.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Linq;
+using System.Net.Mime;
 
 namespace InfoTrackApp
 {
@@ -47,6 +54,11 @@ namespace InfoTrackApp
                 c.SwaggerDoc("v1", new Info { Title = "InfoTrack.API", Version = "v1" });
             });
 
+            services.AddHealthChecks()
+                .AddDbContextCheck<ApplicationDbContext>()
+                .AddCheck("Foo", () => HealthCheckResult.Healthy("Foo is OK!"), tags: new[] { "foo_tag" })
+                .AddCheck("Bar", () => HealthCheckResult.Unhealthy("Bar is unhealthy!"), tags: new[] { "bar_tag" });
+
             services.AddScoped<ISearchService, SearchService>();
         }
 
@@ -71,6 +83,25 @@ namespace InfoTrackApp
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "InfoTrack.API V1");
+            });
+
+            app.UseHealthChecks("/healthcheck", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    var result = JsonConvert.SerializeObject(
+                        new
+                        {
+                            status = report.Status.ToString(),
+                            errors = report.Entries.Select(e => new
+                            {
+                                key = e.Key,
+                                value = $"{Enum.GetName(typeof(HealthStatus), e.Value.Status)}, {e.Value.Description}"
+                            })
+                        });
+                    context.Response.ContentType = MediaTypeNames.Application.Json;
+                    await context.Response.WriteAsync(result);
+                }
             });
 
             app.UseHttpsRedirection();
