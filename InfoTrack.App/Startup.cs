@@ -1,4 +1,8 @@
+using System;
+using System.Linq;
+using System.Net.Mime;
 using AutoMapper;
+using InfoTrack.Client;
 using InfoTrack.DAL;
 using InfoTrack.Services;
 using Microsoft.AspNetCore.Builder;
@@ -14,11 +18,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Serilog;
 using Swashbuckle.AspNetCore.Swagger;
-using System;
-using System.Linq;
-using System.Net.Mime;
 
-namespace InfoTrackApp
+namespace InfoTrack.App
 {
     public class Startup
     {
@@ -37,12 +38,12 @@ namespace InfoTrackApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMemoryCache();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<ApplicationDbContext>();
-
-            services.AddAutoMapper();
-
+    
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -51,13 +52,17 @@ namespace InfoTrackApp
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "InfoTrack.API", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "InfoTrack.App", Version = "v1" });
             });
+
+            services.AddAutoMapper();
 
             services.AddHealthChecks()
                 .AddDbContextCheck<ApplicationDbContext>()
                 .AddCheck("Foo", () => HealthCheckResult.Healthy("Foo is OK!"), tags: new[] { "foo_tag" })
                 .AddCheck("Bar", () => HealthCheckResult.Unhealthy("Bar is unhealthy!"), tags: new[] { "bar_tag" });
+
+            services.AddScoped<IGoogleSearchClient, GoogleSearchClient>();
 
             services.AddScoped<ISearchService, SearchService>();
         }
@@ -82,7 +87,7 @@ namespace InfoTrackApp
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "InfoTrack.API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "InfoTrack.App V1");
             });
 
             app.UseHealthChecks("/healthcheck", new HealthCheckOptions

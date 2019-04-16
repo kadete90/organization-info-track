@@ -20,5 +20,10 @@ namespace InfoTrack.DAL
         {
             optionsBuilder.UseSqlite(_configuration.GetConnectionString("DefaultConnection"));
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<SearchMatch>().HasKey(x => new { x.SearchHistoryId, x.Entry});
+        }
     }
 }

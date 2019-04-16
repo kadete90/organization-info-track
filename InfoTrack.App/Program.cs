@@ -2,11 +2,10 @@ using System;
 using InfoTrack.DAL;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace InfoTrackApp
+namespace InfoTrack.App
 {
     public class Program
     {

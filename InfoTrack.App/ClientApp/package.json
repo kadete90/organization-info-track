@@ -1,11 +1,11 @@
 {
-  "name": "InfoTrackApp",
-  "version": "0.0.0",
+  "name": "InfoTrack.App",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build:ssr": "ng run InfoTrackApp:server:dev",
+    "build:ssr": "ng run InfoTrack.App:server:dev",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -24,7 +24,7 @@
     "@angular/router": "6.1.10",
     "@nguniversal/module-map-ngfactory-loader": "6.0.0",
     "core-js": "^2.5.4",
-    "rxjs": "^6.0.0",
+    "rxjs": "6.4.0",
     "zone.js": "^0.8.26",
     "aspnet-prerendering": "^3.0.1",
     "bootstrap": "^4.3.1",

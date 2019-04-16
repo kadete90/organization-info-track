@@ -5,7 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InfoTrack.Client\InfoTrack.Client.csproj" />
     <ProjectReference Include="..\InfoTrack.DAL\InfoTrack.DAL.csproj" />
+    <ProjectReference Include="..\InfoTrack.Common\InfoTrack.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

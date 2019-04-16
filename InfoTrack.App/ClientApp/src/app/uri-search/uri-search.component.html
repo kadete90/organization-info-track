@@ -1,0 +1,42 @@
+<h1>Search uri matchs on Google Search</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<form [formGroup]="exampleForm" (ngSubmit)="submit()">
+  <div class="form-group">
+    <label>Keyword</label>
+    <p><input class="form-control" formControlName="keyword" /></p>
+    <label>Uri</label>
+    <p><input class="form-control" formControlName="findUri"/></p>
+  </div>
+
+  <button [disabled]="!exampleForm.valid">Submit</button>
+</form>
+
+<hr/>
+
+<p *ngIf="!searchHistory"><em>Loading...</em></p>
+
+<div *ngIf="searchHistory">
+
+  <h2>Search History</h2>
+
+  <table class='table table-striped' >
+  <thead>
+    <tr>
+      <th>Searched</th>
+      <th>Url</th>
+      <th>Keyword</th>
+      <th>Match Entries</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let search of searchHistory">
+      <td>{{ search.searchDate }}</td>
+      <td>{{ search.url }}</td>
+      <td>{{ search.keyword }}</td>
+      <td>{{ search.matchEntries }}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

@@ -24,8 +24,6 @@ namespace InfoTrack.DAL.Migrations
                     b.Property<string>("Keyword")
                         .IsRequired();
 
-                    b.Property<int>("Matches");
-
                     b.Property<DateTime>("SearchDate");
 
                     b.Property<string>("Url")
@@ -34,6 +32,25 @@ namespace InfoTrack.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("SearchHistories");
+                });
+
+            modelBuilder.Entity("InfoTrack.DAL.Entities.SearchMatch", b =>
+                {
+                    b.Property<Guid>("SearchHistoryId");
+
+                    b.Property<int>("Entry");
+
+                    b.HasKey("SearchHistoryId", "Entry");
+
+                    b.ToTable("SearchMatch");
+                });
+
+            modelBuilder.Entity("InfoTrack.DAL.Entities.SearchMatch", b =>
+                {
+                    b.HasOne("InfoTrack.DAL.Entities.SearchHistory", "SearchHistory")
+                        .WithMany("SearchMatches")
+                        .HasForeignKey("SearchHistoryId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
