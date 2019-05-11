@@ -24,7 +24,7 @@ namespace InfoTrack.Client
             var entryMatches = new List<int>();
 
             for (int i = 0; i < allCites.Length; i++){
-                if (allCites[i].Contains(matchUrl))
+                if (allCites[i].Contains(matchUrl, StringComparison.InvariantCultureIgnoreCase))
                 {
                     entryMatches.Add(i+1);
                 }

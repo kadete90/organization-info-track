@@ -22,14 +22,14 @@ namespace InfoTrack.Services
     public class SearchService : ISearchService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<SearchService> _looger;
+        private readonly ILogger<SearchService> _logger;
 
         private readonly IGoogleSearchClient _googleSearchClient;
 
         public SearchService(ApplicationDbContext context, ILogger<SearchService> looger, IGoogleSearchClient searchClient)
         {
             _context = context;
-            _looger = looger;
+            _logger = looger;
             _googleSearchClient = searchClient;
         }
 
@@ -51,7 +51,7 @@ namespace InfoTrack.Services
             catch (Exception ex)
             {
                 string error = "Error fetching google search page";
-                _looger.LogError(error, ex);
+                _logger.LogError(error, ex);
 
                 return new GenericResult<SearchHistory>(error);
             }
@@ -77,7 +77,7 @@ namespace InfoTrack.Services
             catch (Exception ex)
             {
                 string error = "Error saving google search results on the DB";
-                _looger.LogError(error, ex);
+                _logger.LogError(error, ex);
 
                 return new GenericResult<SearchHistory>(error);
             }
@@ -99,7 +99,7 @@ namespace InfoTrack.Services
             catch (Exception ex)
             {
                 string error = "Error saving google search results on the DB";
-                _looger.LogError(error, ex);
+                _logger.LogError(error, ex);
 
                 return new GenericResult<List<SearchHistory>>(error);
             }

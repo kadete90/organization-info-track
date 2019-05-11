@@ -53,9 +53,9 @@ namespace InfoTrack.App.Controllers
         // GET: /api/<controller>/Search?keyword=#keyword#&findUri=#uri#
         [HttpGet]
         [Route("FindUri")]
-        [ProducesResponseType(typeof(IEnumerable<SearchHistoryModel>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(SearchHistoryModel), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SearchAsync(SearchModel mdl)
+        public async Task<ActionResult<SearchHistoryModel>> SearchAsync(SearchModel mdl)
         {
             if (!ModelState.IsValid)
             {
@@ -76,7 +76,7 @@ namespace InfoTrack.App.Controllers
 
             _cache.Remove(CacheKeys.SearchHistory); // force update next history request
 
-            return Ok(result);
+            return Ok(_mapper.Map<SearchHistoryModel>(result.Result));
         }
     }
 }

@@ -46,12 +46,11 @@ export class UriSearchComponent {
         return;
       }
 
-    // TODO look for a better way to build the query
-    let queryUrl = this._baseUrl + 'api/Search/FindUri?keyword=' + this.exampleForm.value.keyword + "&findUri=" + this.exampleForm.value.findUri;
+    // tslint:disable-next-line: max-line-length
+    const queryUrl = `${this._baseUrl}api/Search/FindUri?keyword=${this.exampleForm.value.keyword}&findUri=${this.exampleForm.value.findUri}`;
 
-    this.http.get<SearchHistory>(queryUrl).subscribe(result => {
-      debugger;
-      this.searchHistory.concat(result);
+    this.http.get<SearchHistory>(queryUrl).subscribe((response) => {
+      this.searchHistory.unshift(response);
     }, error => console.error(error));
   }
 }
